@@ -27,14 +27,18 @@ def init_db():
     # Ensure default location exists if database is empty
     db = SessionLocal()
     try:
-        if db.query(Location).count() == 0:
-            default_location = Location(
-                id="loc-tce-campus",
+        location_id = "loc-tce-campus"
+        loc = db.query(Location).filter_by(id=location_id).first()
+        if not loc:
+            loc = Location(
+                id=location_id,
                 name="TCE Campus",
                 latitude=9.9252,
                 longitude=78.1198
             )
-            db.add(default_location)
+            db.add(loc)
             db.commit()
     finally:
         db.close()
+
+
