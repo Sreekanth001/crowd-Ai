@@ -1,0 +1,656 @@
+{
+    "project": {
+        "name": "CrowdVision AI",
+        "phase": 1,
+        "title": "Real-Time Crowd Monitoring MVP",
+        "objective": "Build a simple local AI-powered crowd monitoring system that detects people from a webcam or uploaded video, counts them, calculates occupancy against a user-defined capacity, classifies crowd status, displays live analytics in a React dashboard, and generates crowd alerts.",
+        "deployment": "Local Windows laptop",
+        "priority": [
+            "Working MVP",
+            "Simple architecture",
+            "Real-time functionality",
+            "Easy debugging",
+            "Easy future expansion",
+            "Professional dashboard"
+        ]
+    },
+    "scope": {
+        "include": [
+            "Webcam input",
+            "Uploaded video input",
+            "YOLO person detection",
+            "Person counting",
+            "Capacity configuration",
+            "Occupancy calculation",
+            "Crowd status classification",
+            "FastAPI backend",
+            "React frontend",
+            "WebSocket real-time analytics",
+            "Live dashboard",
+            "Crowd alerts",
+            "Crowd trend chart",
+            "Error handling"
+        ],
+        "exclude": [
+            "Google Maps",
+            "Heatmaps",
+            "Multiple cameras",
+            "CCTV/IP cameras",
+            "Camera overlap detection",
+            "Qdrant",
+            "Face recognition",
+            "Person identification",
+            "Predictive crowd forecasting",
+            "Multi-location management",
+            "Mobile application",
+            "Authentication",
+            "Cloud deployment",
+            "SMS notifications",
+            "WhatsApp notifications",
+            "Email notifications"
+        ]
+    },
+    "technology_stack": {
+        "backend": {
+            "language": "Python",
+            "framework": "FastAPI",
+            "server": "Uvicorn",
+            "computer_vision": "OpenCV",
+            "object_detection": "Ultralytics YOLO",
+            "realtime_communication": "WebSocket"
+        },
+        "frontend": {
+            "framework": "React",
+            "build_tool": "Vite",
+            "language": "JavaScript",
+            "styling": "Tailwind CSS",
+            "charts": "Recharts"
+        },
+        "database": {
+            "required": false,
+            "phase_1_strategy": "Use in-memory state unless persistence is genuinely required."
+        }
+    },
+    "system_architecture": {
+        "data_flow": [
+            "Camera or uploaded video",
+            "OpenCV",
+            "YOLO person detection",
+            "Person count",
+            "Crowd analyzer",
+            "Occupancy calculation",
+            "Crowd status",
+            "FastAPI",
+            "WebSocket",
+            "React dashboard"
+        ],
+        "architecture_diagram": {
+            "input": [
+                "Webcam",
+                "Uploaded video"
+            ],
+            "processing": [
+                "OpenCV",
+                "YOLO"
+            ],
+            "analytics": [
+                "Person count",
+                "Capacity",
+                "Occupancy percentage",
+                "Crowd status"
+            ],
+            "backend": [
+                "FastAPI",
+                "WebSocket"
+            ],
+            "frontend": [
+                "React",
+                "Dashboard",
+                "Live metrics",
+                "Alerts",
+                "Trend chart"
+            ]
+        }
+    },
+    "ai_detection": {
+        "model": "Ultralytics YOLO",
+        "target_class": "person",
+        "requirements": [
+            "Run YOLO inference on video frames",
+            "Only count objects belonging to the person class",
+            "Draw bounding boxes around detected people",
+            "Display current person count",
+            "Keep detector implementation modular",
+            "Allow the YOLO model to be replaced later"
+        ],
+        "example_output": {
+            "people_detected": 27
+        }
+    },
+    "video_input": {
+        "supported_sources": [
+            {
+                "type": "webcam",
+                "action": "Start laptop webcam"
+            },
+            {
+                "type": "uploaded_video",
+                "action": "Upload a video file for processing"
+            }
+        ],
+        "not_supported": [
+            "CCTV",
+            "RTSP",
+            "IP cameras"
+        ],
+        "ui": {
+            "options": [
+                "Start Webcam",
+                "Upload Video"
+            ]
+        }
+    },
+    "capacity_management": {
+        "user_input": {
+            "field": "Maximum Capacity",
+            "type": "integer",
+            "example": 50
+        },
+        "validation": [
+            "Capacity must be greater than zero",
+            "Capacity cannot be negative",
+            "Capacity cannot be empty",
+            "Prevent division by zero"
+        ],
+        "calculation": {
+            "formula": "occupancy_percentage = (current_people / maximum_capacity) * 100"
+        },
+        "example": {
+            "current_people": 35,
+            "maximum_capacity": 50,
+            "occupancy_percentage": 70
+        }
+    },
+    "crowd_classification": {
+        "rules": [
+            {
+                "minimum_percentage": 0,
+                "maximum_percentage": 50,
+                "status": "LOW"
+            },
+            {
+                "minimum_percentage": 50,
+                "maximum_percentage": 80,
+                "status": "MODERATE"
+            },
+            {
+                "minimum_percentage": 80,
+                "maximum_percentage": 100,
+                "status": "HIGH"
+            },
+            {
+                "minimum_percentage": 100,
+                "maximum_percentage": null,
+                "status": "CRITICAL"
+            }
+        ],
+        "example": {
+            "people_count": 42,
+            "capacity": 50,
+            "occupancy": 84,
+            "status": "HIGH"
+        }
+    },
+    "realtime_communication": {
+        "protocol": "WebSocket",
+        "purpose": "Send real-time crowd analytics from FastAPI to React",
+        "websocket_payload": {
+            "people_count": 42,
+            "capacity": 50,
+            "occupancy": 84,
+            "status": "HIGH",
+            "timestamp": "ISO-8601 timestamp"
+        },
+        "requirements": [
+            "Dashboard must update without page refresh",
+            "Handle WebSocket disconnections",
+            "Reconnect when appropriate",
+            "Do not send unnecessarily large data through WebSocket",
+            "Use WebSocket primarily for real-time analytics"
+        ]
+    },
+    "dashboard": {
+        "name": "CrowdVision AI",
+        "subtitle": "Real-Time AI Crowd Monitoring System",
+        "style": {
+            "theme": "dark monitoring dashboard",
+            "design": [
+                "Modern",
+                "Clean",
+                "Professional",
+                "Responsive",
+                "Good spacing",
+                "Clear typography",
+                "Strong visual hierarchy"
+            ],
+            "avoid": [
+                "Excessive animations",
+                "Unnecessary UI elements",
+                "Cluttered layouts"
+            ]
+        },
+        "sections": {
+            "header": {
+                "title": "CrowdVision AI",
+                "subtitle": "Real-Time Crowd Monitoring"
+            },
+            "statistics": [
+                {
+                    "title": "Current People",
+                    "example_value": 42,
+                    "description": "People Detected"
+                },
+                {
+                    "title": "Maximum Capacity",
+                    "example_value": 50,
+                    "description": "Maximum Capacity"
+                },
+                {
+                    "title": "Occupancy",
+                    "example_value": "84%",
+                    "description": "Occupancy"
+                },
+                {
+                    "title": "Crowd Status",
+                    "example_value": "HIGH",
+                    "description": "Crowd Status"
+                }
+            ],
+            "video_monitor": {
+                "title": "LIVE CAMERA",
+                "requirements": [
+                    "Show processed video",
+                    "Show YOLO bounding boxes",
+                    "Show people count",
+                    "Show live indicator",
+                    "Clearly indicate whether camera is active"
+                ],
+                "example": {
+                    "indicator": "LIVE",
+                    "people_detected": 42
+                }
+            },
+            "crowd_status": {
+                "states": [
+                    "LOW",
+                    "MODERATE",
+                    "HIGH",
+                    "CRITICAL"
+                ],
+                "requirements": [
+                    "Clearly distinguish crowd states",
+                    "Use accessible colors",
+                    "Maintain readable text"
+                ]
+            },
+            "alerts": {
+                "high_threshold": 80,
+                "high_alert": {
+                    "title": "High Crowd Alert",
+                    "message": "Crowd density is approaching maximum capacity."
+                },
+                "critical_threshold": 100,
+                "critical_alert": {
+                    "title": "Critical Alert",
+                    "message": "Maximum capacity has been exceeded."
+                },
+                "external_notifications": false
+            },
+            "crowd_trend": {
+                "type": "line_chart",
+                "library": "Recharts",
+                "x_axis": "Time",
+                "y_axis": "Number of people",
+                "example_data": [
+                    {
+                        "time": "10:00",
+                        "people": 20
+                    },
+                    {
+                        "time": "10:01",
+                        "people": 24
+                    },
+                    {
+                        "time": "10:02",
+                        "people": 31
+                    },
+                    {
+                        "time": "10:03",
+                        "people": 37
+                    },
+                    {
+                        "time": "10:04",
+                        "people": 42
+                    }
+                ],
+                "requirements": [
+                    "Maintain recent crowd-count history",
+                    "Avoid unlimited memory growth",
+                    "Update chart in real time"
+                ]
+            }
+        }
+    },
+    "backend_structure": {
+        "suggested_structure": [
+            "backend/",
+            "backend/main.py",
+            "backend/requirements.txt",
+            "backend/api/routes.py",
+            "backend/services/yolo_detector.py",
+            "backend/services/video_processor.py",
+            "backend/services/crowd_analyzer.py",
+            "backend/models/schemas.py",
+            "backend/utils/config.py"
+        ],
+        "responsibilities": {
+            "main.py": "FastAPI application entry point",
+            "routes.py": "HTTP and WebSocket endpoints",
+            "yolo_detector.py": "YOLO model loading and person detection",
+            "video_processor.py": "Video and webcam processing",
+            "crowd_analyzer.py": "Capacity, occupancy and crowd status calculations",
+            "schemas.py": "Request and response schemas",
+            "config.py": "Configuration values and environment settings"
+        }
+    },
+    "frontend_structure": {
+        "suggested_structure": [
+            "frontend/",
+            "frontend/src/",
+            "frontend/src/components/",
+            "frontend/src/components/Header.jsx",
+            "frontend/src/components/StatCard.jsx",
+            "frontend/src/components/VideoMonitor.jsx",
+            "frontend/src/components/CrowdStatus.jsx",
+            "frontend/src/components/AlertBox.jsx",
+            "frontend/src/components/CrowdChart.jsx",
+            "frontend/src/services/websocket.js",
+            "frontend/src/App.jsx",
+            "frontend/src/main.jsx"
+        ],
+        "principle": "Keep React components modular and reusable."
+    },
+    "error_handling": {
+        "cases": [
+            "Webcam unavailable",
+            "Camera permission denied",
+            "Invalid video file",
+            "YOLO model loading failure",
+            "Backend unavailable",
+            "WebSocket disconnection",
+            "Invalid capacity",
+            "Empty video",
+            "Video processing failure"
+        ],
+        "requirements": [
+            "Do not crash the application",
+            "Show user-friendly error messages",
+            "Clean up resources when processing stops"
+        ],
+        "example": {
+            "error": "Unable to access webcam. Please check camera permissions."
+        }
+    },
+    "performance": {
+        "requirements": [
+            "Resize frames when appropriate",
+            "Avoid processing every frame at unnecessarily high resolution",
+            "Avoid blocking the FastAPI event loop",
+            "Use background processing where appropriate",
+            "Avoid sending unnecessary large data through WebSocket",
+            "Release OpenCV camera and video resources correctly",
+            "Maintain smooth local performance"
+        ],
+        "important_design_decision": "Do not transmit the entire processed video stream through WebSocket unless there is a strong technical reason. Use WebSocket primarily for real-time analytics such as people count, occupancy, status and alerts."
+    },
+    "security": {
+        "requirements": [
+            "Validate uploaded files",
+            "Validate capacity input",
+            "Do not expose secrets in frontend code",
+            "Use environment variables for configurable values",
+            "Handle WebSocket disconnects safely",
+            "Clean up camera and video resources"
+        ]
+    },
+    "development_sequence": [
+        {
+            "step": 1,
+            "name": "Backend setup",
+            "tasks": [
+                "Create Python environment",
+                "Install FastAPI",
+                "Install Uvicorn",
+                "Install OpenCV",
+                "Install Ultralytics",
+                "Create basic FastAPI server"
+            ],
+            "verification": "FastAPI server starts successfully."
+        },
+        {
+            "step": 2,
+            "name": "YOLO standalone test",
+            "tasks": [
+                "Load YOLO model",
+                "Process sample video",
+                "Detect people",
+                "Draw bounding boxes",
+                "Display people count"
+            ],
+            "verification": "YOLO successfully detects and counts people in a sample video."
+        },
+        {
+            "step": 3,
+            "name": "Crowd analyzer",
+            "tasks": [
+                "Accept people count",
+                "Accept capacity",
+                "Calculate occupancy percentage",
+                "Classify crowd status",
+                "Validate input"
+            ],
+            "verification": "Crowd analyzer returns correct occupancy and status."
+        },
+        {
+            "step": 4,
+            "name": "FastAPI WebSocket",
+            "tasks": [
+                "Create WebSocket endpoint",
+                "Send crowd analytics",
+                "Handle client connection",
+                "Handle client disconnection"
+            ],
+            "verification": "WebSocket sends live JSON analytics."
+        },
+        {
+            "step": 5,
+            "name": "React dashboard",
+            "tasks": [
+                "Create Vite React application",
+                "Install Tailwind CSS",
+                "Create dashboard layout",
+                "Create statistics cards",
+                "Create video monitoring section",
+                "Create crowd status section",
+                "Create alert section",
+                "Create chart"
+            ],
+            "verification": "Dashboard works using temporary/mock data."
+        },
+        {
+            "step": 6,
+            "name": "Frontend WebSocket integration",
+            "tasks": [
+                "Connect React to FastAPI WebSocket",
+                "Receive JSON analytics",
+                "Update statistics cards",
+                "Update crowd status",
+                "Update alerts",
+                "Update chart"
+            ],
+            "verification": "Dashboard updates automatically without page refresh."
+        },
+        {
+            "step": 7,
+            "name": "Real YOLO integration",
+            "tasks": [
+                "Connect YOLO detection to backend",
+                "Send real people counts",
+                "Send occupancy",
+                "Send crowd status"
+            ],
+            "verification": "Real YOLO detections appear in the dashboard."
+        },
+        {
+            "step": 8,
+            "name": "Webcam support",
+            "tasks": [
+                "Add webcam start functionality",
+                "Add webcam stop functionality",
+                "Handle camera errors",
+                "Release camera resources"
+            ],
+            "verification": "Laptop webcam works from the application."
+        },
+        {
+            "step": 9,
+            "name": "Uploaded video support",
+            "tasks": [
+                "Add video upload UI",
+                "Validate video file",
+                "Process uploaded video",
+                "Display results"
+            ],
+            "verification": "User can upload and analyze a video."
+        },
+        {
+            "step": 10,
+            "name": "Alerts and trend chart",
+            "tasks": [
+                "Implement high crowd alert",
+                "Implement critical crowd alert",
+                "Implement recent crowd history",
+                "Display live trend chart"
+            ],
+            "verification": "Alerts and chart update correctly in real time."
+        },
+        {
+            "step": 11,
+            "name": "End-to-end testing",
+            "tasks": [
+                "Test webcam",
+                "Test uploaded video",
+                "Test capacity validation",
+                "Test YOLO detection",
+                "Test WebSocket",
+                "Test alerts",
+                "Test chart",
+                "Test backend failure",
+                "Test WebSocket reconnection"
+            ],
+            "verification": "Complete Phase 1 MVP works reliably."
+        }
+    ],
+    "final_demo_flow": [
+        "User opens CrowdVision AI",
+        "User enters maximum capacity",
+        "User selects webcam or uploads a video",
+        "Video processing starts",
+        "YOLO detects people",
+        "People count is calculated",
+        "Occupancy percentage is calculated",
+        "Crowd status is determined",
+        "React dashboard updates in real time",
+        "Alert appears when occupancy reaches high or critical levels",
+        "Crowd trend chart updates continuously"
+    ],
+    "expected_example": {
+        "capacity": 50,
+        "people_count": 42,
+        "occupancy_percentage": 84,
+        "crowd_status": "HIGH",
+        "alert": {
+            "type": "HIGH",
+            "message": "Crowd density is approaching maximum capacity."
+        }
+    },
+    "coding_instructions": {
+        "workflow": [
+            "Do not generate the entire project blindly in one step.",
+            "Implement incrementally.",
+            "Explain each major step before implementation.",
+            "Provide exact installation commands.",
+            "Provide exact run commands.",
+            "Provide testing instructions after each step.",
+            "Fix errors before moving to the next step."
+        ],
+        "architecture": [
+            "Keep backend responsibilities separated.",
+            "Keep frontend components modular.",
+            "Avoid unnecessary dependencies.",
+            "Avoid over-engineering.",
+            "Prefer simple solutions that are easy to understand and debug."
+        ],
+        "quality": [
+            "Write clean Python code.",
+            "Write clean React code.",
+            "Use meaningful variable and function names.",
+            "Add useful comments where necessary.",
+            "Handle errors gracefully.",
+            "Keep configuration separate from application logic."
+        ]
+    },
+    "deliverables": [
+        "Complete backend source code",
+        "Complete frontend source code",
+        "requirements.txt",
+        "package.json",
+        "Environment setup instructions",
+        "Installation commands",
+        "Backend run command",
+        "Frontend run command",
+        "Testing instructions",
+        "Common errors and fixes",
+        "Architecture explanation",
+        "Complete data-flow explanation",
+        "Phase 2 extension recommendations"
+    ],
+    "success_criteria": [
+        "YOLO detects people correctly in a test video.",
+        "People are counted correctly enough for an MVP demonstration.",
+        "User can configure maximum capacity.",
+        "Occupancy percentage is calculated correctly.",
+        "Crowd status changes according to configured thresholds.",
+        "React dashboard receives real-time analytics.",
+        "Webcam input works.",
+        "Uploaded video input works.",
+        "Alerts appear at the correct thresholds.",
+        "Crowd trend chart updates in real time.",
+        "Application handles common errors gracefully.",
+        "The complete system runs locally on a Windows laptop."
+    ],
+    "future_phase_2": {
+        "planned_features": [
+            "Google Maps integration",
+            "Multiple monitoring zones",
+            "Multiple cameras",
+            "Crowd heatmap",
+            "Historical analytics",
+            "Crowd growth detection",
+            "Smart alerts",
+            "Location-based monitoring",
+            "Advanced crowd analytics"
+        ]
+    },
+    "developer_instruction": "Start with Step 1 only. Do not implement later steps until the current step has been verified successfully."
+}

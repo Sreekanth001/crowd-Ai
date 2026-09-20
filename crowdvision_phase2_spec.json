@@ -1,0 +1,889 @@
+{
+    "project": {
+        "name": "CrowdVision AI",
+        "phase": 2,
+        "title": "Smart Multi-Zone Crowd Management System",
+        "status": "Phase 1 completed",
+        "objective": "Extend the Phase 1 real-time crowd monitoring MVP into a smart crowd-management platform with location mapping, monitoring zones, multiple camera support, crowd heatmaps, historical analytics, crowd growth detection, and intelligent alerts.",
+        "important": "Preserve all working Phase 1 functionality while adding Phase 2 features incrementally."
+    },
+    "phase_1_features_to_preserve": [
+        "YOLO person detection",
+        "Person counting",
+        "Webcam input",
+        "Uploaded video input",
+        "Capacity configuration",
+        "Occupancy calculation",
+        "Crowd classification",
+        "FastAPI backend",
+        "React dashboard",
+        "WebSocket real-time updates",
+        "Crowd alerts",
+        "Crowd trend chart"
+    ],
+    "phase_2_objectives": [
+        "Add location-based monitoring",
+        "Add Google Maps visualization",
+        "Support multiple monitoring zones",
+        "Support multiple camera sources",
+        "Display crowd density on a map",
+        "Create a live crowd heatmap",
+        "Store historical crowd analytics",
+        "Detect rapidly increasing crowds",
+        "Improve alert intelligence",
+        "Provide zone-level analytics",
+        "Create an overall crowd-management dashboard"
+    ],
+    "scope": {
+        "include": [
+            "Google Maps",
+            "Monitoring zones",
+            "Multiple cameras",
+            "Zone-specific capacity",
+            "Live crowd density",
+            "Heatmap",
+            "Historical analytics",
+            "Crowd growth detection",
+            "Smart alerts",
+            "Zone comparison",
+            "Location dashboard",
+            "Real-time map updates"
+        ],
+        "exclude": [
+            "Face recognition",
+            "Person identification",
+            "Facial biometrics",
+            "Predictive AI forecasting",
+            "Complex crowd behavior recognition",
+            "Automatic emergency response",
+            "SMS integration",
+            "WhatsApp integration",
+            "Email notification services",
+            "Cloud deployment unless specifically required",
+            "Complex authentication system"
+        ]
+    },
+    "architecture": {
+        "high_level_flow": [
+            "Admin selects or creates a monitoring location",
+            "Admin defines monitoring zones",
+            "Each zone is assigned a capacity",
+            "One or more cameras can be assigned to each zone",
+            "Camera streams are processed using YOLO",
+            "People are detected and counted",
+            "Zone occupancy is calculated",
+            "Zone crowd status is calculated",
+            "Backend stores analytics",
+            "WebSocket sends real-time updates",
+            "React dashboard updates",
+            "Google Maps displays zones",
+            "Heatmap displays crowd density",
+            "Alert engine evaluates crowd conditions"
+        ],
+        "diagram": {
+            "location": "Google Maps",
+            "zones": "Monitoring Zones",
+            "cameras": "Camera Sources",
+            "ai": "YOLO Person Detection",
+            "analytics": "Crowd Analytics Engine",
+            "backend": "FastAPI",
+            "realtime": "WebSocket",
+            "storage": "Analytics Database",
+            "frontend": "React Dashboard"
+        }
+    },
+    "technology_stack": {
+        "frontend": {
+            "framework": "React",
+            "build_tool": "Vite",
+            "styling": "Tailwind CSS",
+            "maps": "Google Maps JavaScript API",
+            "charts": "Recharts",
+            "realtime": "WebSocket"
+        },
+        "backend": {
+            "language": "Python",
+            "framework": "FastAPI",
+            "computer_vision": "OpenCV",
+            "object_detection": "Ultralytics YOLO",
+            "realtime": "WebSocket"
+        },
+        "database": {
+            "recommendation": "Use a simple relational database such as SQLite for Phase 2 local development.",
+            "purpose": [
+                "Store locations",
+                "Store monitoring zones",
+                "Store camera configuration",
+                "Store crowd measurements",
+                "Store alerts"
+            ],
+            "future_option": "PostgreSQL can replace SQLite later without changing the overall architecture."
+        }
+    },
+    "feature_1_location_management": {
+        "objective": "Allow the administrator to define a real-world location for crowd monitoring.",
+        "requirements": [
+            "Create a monitoring location",
+            "Store location name",
+            "Store latitude",
+            "Store longitude",
+            "Display location on Google Maps",
+            "Allow the location to contain multiple monitoring zones"
+        ],
+        "example": {
+            "name": "TCE Campus",
+            "latitude": 9.9252,
+            "longitude": 78.1198
+        }
+    },
+    "feature_2_google_maps": {
+        "objective": "Display monitored locations and crowd conditions on an interactive map.",
+        "requirements": [
+            "Integrate Google Maps",
+            "Display monitoring locations",
+            "Display monitoring zones",
+            "Display zone status",
+            "Update marker or zone status in real time",
+            "Allow user to select a zone from the map"
+        ],
+        "marker_status": [
+            "LOW",
+            "MODERATE",
+            "HIGH",
+            "CRITICAL"
+        ],
+        "interaction": [
+            "Clicking a zone should display its current people count",
+            "Show capacity",
+            "Show occupancy",
+            "Show crowd status",
+            "Show last update time"
+        ],
+        "security": [
+            "Do not hardcode API keys in source code",
+            "Use environment variables",
+            "Follow Google Maps API key restrictions"
+        ]
+    },
+    "feature_3_monitoring_zones": {
+        "objective": "Divide a monitored location into multiple crowd-monitoring zones.",
+        "example": {
+            "location": "TCE Campus",
+            "zones": [
+                {
+                    "name": "Main Gate",
+                    "capacity": 100
+                },
+                {
+                    "name": "Canteen",
+                    "capacity": 80
+                },
+                {
+                    "name": "Auditorium",
+                    "capacity": 300
+                },
+                {
+                    "name": "Ground",
+                    "capacity": 500
+                }
+            ]
+        },
+        "zone_data": [
+            "zone_id",
+            "location_id",
+            "zone_name",
+            "capacity",
+            "latitude",
+            "longitude",
+            "status",
+            "current_people",
+            "occupancy"
+        ]
+    },
+    "feature_4_multiple_cameras": {
+        "objective": "Allow different camera sources to monitor different zones.",
+        "camera_types": [
+            "Webcam",
+            "Uploaded video"
+        ],
+        "architecture": {
+            "example": [
+                "Camera 1 -> Main Gate",
+                "Camera 2 -> Canteen",
+                "Camera 3 -> Auditorium"
+            ]
+        },
+        "camera_configuration": [
+            "camera_id",
+            "zone_id",
+            "camera_name",
+            "camera_type",
+            "status"
+        ],
+        "important": "Do not implement RTSP/IP camera support yet unless it is required and stable.",
+        "overlap_handling": "For Phase 2, treat each camera as an independent zone. Do not attempt advanced cross-camera person re-identification."
+    },
+    "feature_5_zone_crowd_analytics": {
+        "objective": "Calculate crowd analytics independently for every zone.",
+        "metrics": [
+            "Current people",
+            "Maximum capacity",
+            "Occupancy percentage",
+            "Crowd status",
+            "People increase rate",
+            "Last updated time"
+        ],
+        "formula": "occupancy = (current_people / capacity) * 100",
+        "classification": [
+            {
+                "range": "0-50%",
+                "status": "LOW"
+            },
+            {
+                "range": "50-80%",
+                "status": "MODERATE"
+            },
+            {
+                "range": "80-100%",
+                "status": "HIGH"
+            },
+            {
+                "range": ">100%",
+                "status": "CRITICAL"
+            }
+        ]
+    },
+    "feature_6_heatmap": {
+        "objective": "Visualize crowd density geographically on the map.",
+        "requirements": [
+            "Use current crowd measurements",
+            "Associate crowd measurements with zone coordinates",
+            "Display higher-density zones more prominently",
+            "Update heatmap periodically",
+            "Allow heatmap visibility to be toggled"
+        ],
+        "concept": {
+            "low_density": "low intensity",
+            "moderate_density": "medium intensity",
+            "high_density": "high intensity",
+            "critical_density": "very high intensity"
+        },
+        "important": "The heatmap represents crowd density by monitored zone. Do not claim that it represents exact individual positions unless such positional tracking is actually implemented."
+    },
+    "feature_7_historical_analytics": {
+        "objective": "Store crowd measurements and allow users to analyze previous crowd conditions.",
+        "store": [
+            "timestamp",
+            "location_id",
+            "zone_id",
+            "people_count",
+            "capacity",
+            "occupancy",
+            "status"
+        ],
+        "dashboard_metrics": [
+            "Peak crowd",
+            "Average crowd",
+            "Peak occupancy",
+            "Average occupancy",
+            "Number of high-crowd events",
+            "Number of critical events"
+        ],
+        "time_filters": [
+            "Last hour",
+            "Today",
+            "Last 24 hours",
+            "Last 7 days"
+        ]
+    },
+    "feature_8_crowd_growth_detection": {
+        "objective": "Detect when the crowd is increasing rapidly rather than only checking capacity.",
+        "example": {
+            "previous_people": 50,
+            "current_people": 75,
+            "increase_percentage": 50
+        },
+        "logic": {
+            "description": "Compare recent crowd measurements over a configurable time window.",
+            "example_threshold": "If the crowd increases by approximately 30% or more within a short configured window, generate a crowd-growth warning."
+        },
+        "important": [
+            "This is a rule-based analytics feature, not predictive AI.",
+            "Do not claim that the system predicts future crowd levels."
+        ]
+    },
+    "feature_9_smart_alerts": {
+        "objective": "Create alerts based on multiple crowd conditions.",
+        "alert_types": [
+            {
+                "type": "HIGH_OCCUPANCY",
+                "condition": "occupancy >= 80%"
+            },
+            {
+                "type": "CAPACITY_EXCEEDED",
+                "condition": "occupancy > 100%"
+            },
+            {
+                "type": "RAPID_GROWTH",
+                "condition": "Crowd increases beyond configured growth threshold within the configured time window."
+            }
+        ],
+        "alert_data": [
+            "alert_id",
+            "zone_id",
+            "alert_type",
+            "severity",
+            "message",
+            "timestamp",
+            "current_people",
+            "occupancy",
+            "resolved"
+        ],
+        "dashboard": [
+            "Show active alerts",
+            "Show alert history",
+            "Allow alerts to be marked resolved",
+            "Show affected zone"
+        ]
+    },
+    "feature_10_overall_dashboard": {
+        "objective": "Create a central dashboard for monitoring the entire location.",
+        "layout": {
+            "header": [
+                "CrowdVision AI",
+                "Selected Location",
+                "System Status"
+            ],
+            "summary_cards": [
+                "Total People",
+                "Total Capacity",
+                "Overall Occupancy",
+                "Active Alerts"
+            ],
+            "map": "Large interactive Google Maps view with zones and crowd visualization",
+            "zone_panel": "List of all monitoring zones and their current status",
+            "analytics": "Historical crowd charts",
+            "alerts": "Active and recent alerts"
+        }
+    },
+    "zone_status_example": {
+        "zones": [
+            {
+                "name": "Main Gate",
+                "people": 65,
+                "capacity": 100,
+                "occupancy": 65,
+                "status": "MODERATE"
+            },
+            {
+                "name": "Canteen",
+                "people": 76,
+                "capacity": 80,
+                "occupancy": 95,
+                "status": "HIGH"
+            },
+            {
+                "name": "Auditorium",
+                "people": 315,
+                "capacity": 300,
+                "occupancy": 105,
+                "status": "CRITICAL"
+            }
+        ]
+    },
+    "backend_database": {
+        "recommended_database": "SQLite",
+        "tables": {
+            "locations": [
+                "id",
+                "name",
+                "latitude",
+                "longitude",
+                "created_at"
+            ],
+            "zones": [
+                "id",
+                "location_id",
+                "name",
+                "capacity",
+                "latitude",
+                "longitude",
+                "created_at"
+            ],
+            "cameras": [
+                "id",
+                "zone_id",
+                "name",
+                "type",
+                "status",
+                "created_at"
+            ],
+            "crowd_measurements": [
+                "id",
+                "zone_id",
+                "timestamp",
+                "people_count",
+                "capacity",
+                "occupancy",
+                "status"
+            ],
+            "alerts": [
+                "id",
+                "zone_id",
+                "type",
+                "severity",
+                "message",
+                "timestamp",
+                "resolved"
+            ]
+        }
+    },
+    "backend_structure": {
+        "suggested_structure": [
+            "backend/",
+            "backend/main.py",
+            "backend/requirements.txt",
+            "backend/api/",
+            "backend/api/routes.py",
+            "backend/api/websocket.py",
+            "backend/services/",
+            "backend/services/yolo_detector.py",
+            "backend/services/video_processor.py",
+            "backend/services/crowd_analyzer.py",
+            "backend/services/alert_engine.py",
+            "backend/services/heatmap_service.py",
+            "backend/services/analytics_service.py",
+            "backend/database/",
+            "backend/database/database.py",
+            "backend/database/models.py",
+            "backend/models/",
+            "backend/models/schemas.py",
+            "backend/utils/",
+            "backend/utils/config.py"
+        ],
+        "principles": [
+            "Separate detection from analytics",
+            "Separate analytics from alerts",
+            "Separate database operations from business logic",
+            "Keep WebSocket logic independent from YOLO logic",
+            "Reuse Phase 1 services where possible"
+        ]
+    },
+    "frontend_structure": {
+        "suggested_structure": [
+            "frontend/",
+            "frontend/src/",
+            "frontend/src/components/",
+            "frontend/src/components/Header.jsx",
+            "frontend/src/components/StatCard.jsx",
+            "frontend/src/components/ZoneList.jsx",
+            "frontend/src/components/ZoneCard.jsx",
+            "frontend/src/components/LiveMap.jsx",
+            "frontend/src/components/Heatmap.jsx",
+            "frontend/src/components/CameraMonitor.jsx",
+            "frontend/src/components/CrowdChart.jsx",
+            "frontend/src/components/AlertPanel.jsx",
+            "frontend/src/components/LocationSelector.jsx",
+            "frontend/src/pages/",
+            "frontend/src/pages/Dashboard.jsx",
+            "frontend/src/pages/ZoneDetails.jsx",
+            "frontend/src/services/",
+            "frontend/src/services/api.js",
+            "frontend/src/services/websocket.js",
+            "frontend/src/App.jsx"
+        ]
+    },
+    "api_design": {
+        "locations": [
+            "GET /api/locations",
+            "POST /api/locations",
+            "GET /api/locations/{location_id}"
+        ],
+        "zones": [
+            "GET /api/locations/{location_id}/zones",
+            "POST /api/locations/{location_id}/zones",
+            "GET /api/zones/{zone_id}",
+            "PUT /api/zones/{zone_id}",
+            "DELETE /api/zones/{zone_id}"
+        ],
+        "cameras": [
+            "GET /api/zones/{zone_id}/cameras",
+            "POST /api/zones/{zone_id}/cameras"
+        ],
+        "analytics": [
+            "GET /api/zones/{zone_id}/analytics",
+            "GET /api/zones/{zone_id}/history",
+            "GET /api/locations/{location_id}/summary"
+        ],
+        "alerts": [
+            "GET /api/alerts",
+            "GET /api/zones/{zone_id}/alerts",
+            "PUT /api/alerts/{alert_id}/resolve"
+        ],
+        "websocket": [
+            "WS /ws/location/{location_id}",
+            "WS /ws/zone/{zone_id}"
+        ]
+    },
+    "realtime_data": {
+        "websocket_message": {
+            "location_id": "location-id",
+            "zone_id": "zone-id",
+            "zone_name": "Main Gate",
+            "people_count": 65,
+            "capacity": 100,
+            "occupancy": 65,
+            "status": "MODERATE",
+            "timestamp": "ISO-8601 timestamp"
+        },
+        "requirements": [
+            "Update dashboard without page refresh",
+            "Update map status",
+            "Update zone cards",
+            "Update alerts",
+            "Update heatmap data",
+            "Handle WebSocket reconnects"
+        ]
+    },
+    "performance": {
+        "requirements": [
+            "Do not run unnecessary YOLO inference",
+            "Avoid processing frames at unnecessarily high resolution",
+            "Do not send raw video frames through WebSocket",
+            "Send only required analytics through WebSocket",
+            "Store historical measurements at a reasonable interval rather than every video frame",
+            "Prevent database from being flooded with duplicate measurements",
+            "Keep the UI responsive when multiple zones are active"
+        ],
+        "recommended_storage_interval": "Store aggregated crowd measurements periodically rather than every frame."
+    },
+    "privacy": {
+        "requirements": [
+            "Do not implement face recognition",
+            "Do not identify individuals",
+            "Do not store facial images",
+            "Prefer storing aggregate counts instead of raw video",
+            "Clearly distinguish crowd counting from identity tracking"
+        ]
+    },
+    "development_sequence": [
+        {
+            "step": 1,
+            "name": "Refactor Phase 1",
+            "tasks": [
+                "Review existing Phase 1 code",
+                "Preserve all working features",
+                "Separate YOLO detection from crowd analytics",
+                "Prepare code for multiple zones"
+            ],
+            "verification": "Phase 1 continues working exactly as before."
+        },
+        {
+            "step": 2,
+            "name": "Add SQLite database",
+            "tasks": [
+                "Set up SQLite",
+                "Create database models",
+                "Create locations table",
+                "Create zones table",
+                "Create cameras table",
+                "Create crowd measurements table",
+                "Create alerts table"
+            ],
+            "verification": "Database tables are created and basic CRUD operations work."
+        },
+        {
+            "step": 3,
+            "name": "Location management",
+            "tasks": [
+                "Create location API",
+                "Create location selection UI",
+                "Store latitude and longitude",
+                "Display selected location"
+            ],
+            "verification": "User can create and select a monitoring location."
+        },
+        {
+            "step": 4,
+            "name": "Monitoring zones",
+            "tasks": [
+                "Create zones",
+                "Assign capacity",
+                "Store zone coordinates",
+                "Display zone list",
+                "Display zone status"
+            ],
+            "verification": "Multiple zones can be created under one location."
+        },
+        {
+            "step": 5,
+            "name": "Multiple camera architecture",
+            "tasks": [
+                "Associate cameras with zones",
+                "Reuse Phase 1 YOLO pipeline",
+                "Process each active camera independently",
+                "Generate zone-specific people counts"
+            ],
+            "verification": "At least two zones can receive independent camera inputs."
+        },
+        {
+            "step": 6,
+            "name": "Google Maps integration",
+            "tasks": [
+                "Integrate Google Maps",
+                "Display location",
+                "Display zone markers",
+                "Display crowd status",
+                "Connect map interaction to zone details"
+            ],
+            "verification": "User can visually monitor zones on the map."
+        },
+        {
+            "step": 7,
+            "name": "Live zone analytics",
+            "tasks": [
+                "Calculate zone occupancy",
+                "Calculate zone status",
+                "Send zone analytics through WebSocket",
+                "Update zone cards",
+                "Update map markers"
+            ],
+            "verification": "Zone analytics update in real time."
+        },
+        {
+            "step": 8,
+            "name": "Heatmap",
+            "tasks": [
+                "Create density data from zone measurements",
+                "Display heatmap",
+                "Update heatmap periodically",
+                "Add heatmap toggle"
+            ],
+            "verification": "Map visually represents crowd density across zones."
+        },
+        {
+            "step": 9,
+            "name": "Historical analytics",
+            "tasks": [
+                "Store aggregated crowd measurements",
+                "Create analytics API",
+                "Create historical charts",
+                "Add time filters",
+                "Calculate peak and average metrics"
+            ],
+            "verification": "User can inspect historical crowd conditions."
+        },
+        {
+            "step": 10,
+            "name": "Crowd growth detection",
+            "tasks": [
+                "Compare recent crowd measurements",
+                "Calculate growth percentage",
+                "Configure growth threshold",
+                "Generate rapid-growth warnings"
+            ],
+            "verification": "System detects significant rapid increases in crowd size."
+        },
+        {
+            "step": 11,
+            "name": "Smart alerts",
+            "tasks": [
+                "Implement high occupancy alerts",
+                "Implement capacity exceeded alerts",
+                "Implement rapid-growth alerts",
+                "Store alert history",
+                "Add alert resolution"
+            ],
+            "verification": "Alerts are generated and displayed correctly."
+        },
+        {
+            "step": 12,
+            "name": "Final dashboard",
+            "tasks": [
+                "Combine map",
+                "Zone list",
+                "Statistics",
+                "Heatmap",
+                "Historical charts",
+                "Alerts",
+                "Camera monitoring"
+            ],
+            "verification": "Complete Phase 2 dashboard works as one integrated system."
+        },
+        {
+            "step": 13,
+            "name": "End-to-end testing",
+            "tasks": [
+                "Test multiple zones",
+                "Test multiple camera inputs",
+                "Test map",
+                "Test heatmap",
+                "Test historical data",
+                "Test alerts",
+                "Test WebSocket",
+                "Test database",
+                "Test error handling"
+            ],
+            "verification": "Phase 2 works reliably as a complete local crowd-management system."
+        }
+    ],
+    "final_demo_scenario": {
+        "location": "College Campus",
+        "zones": [
+            {
+                "name": "Main Gate",
+                "capacity": 100,
+                "camera": "Camera 1"
+            },
+            {
+                "name": "Canteen",
+                "capacity": 80,
+                "camera": "Camera 2"
+            },
+            {
+                "name": "Auditorium",
+                "capacity": 300,
+                "camera": "Camera 3"
+            }
+        ],
+        "demo_flow": [
+            "Admin opens CrowdVision AI",
+            "Admin selects College Campus",
+            "Dashboard loads all monitoring zones",
+            "Google Maps displays the monitored zones",
+            "Each zone receives camera analytics",
+            "YOLO detects people",
+            "People counts update in real time",
+            "Zone occupancy is calculated",
+            "Zone status is displayed",
+            "Map markers update according to crowd status",
+            "Heatmap displays crowd density",
+            "Historical chart records crowd trends",
+            "Rapid crowd growth is detected",
+            "Alerts are generated when thresholds are crossed",
+            "Admin can inspect individual zones"
+        ]
+    },
+    "expected_dashboard": {
+        "summary": {
+            "total_people": 456,
+            "total_capacity": 480,
+            "overall_occupancy": 95,
+            "active_alerts": 2
+        },
+        "zones": [
+            {
+                "name": "Main Gate",
+                "people": 65,
+                "capacity": 100,
+                "status": "MODERATE"
+            },
+            {
+                "name": "Canteen",
+                "people": 76,
+                "capacity": 80,
+                "status": "HIGH"
+            },
+            {
+                "name": "Auditorium",
+                "people": 315,
+                "capacity": 300,
+                "status": "CRITICAL"
+            }
+        ]
+    },
+    "success_criteria": [
+        "Phase 1 functionality remains operational.",
+        "User can create a monitoring location.",
+        "User can create multiple monitoring zones.",
+        "Each zone has its own capacity.",
+        "Different camera inputs can be assigned to different zones.",
+        "YOLO provides independent people counts for zones.",
+        "Google Maps displays monitored zones.",
+        "Map status updates in real time.",
+        "Heatmap represents crowd density.",
+        "Historical crowd measurements are stored.",
+        "Historical charts display crowd trends.",
+        "System detects rapid crowd increases using configurable rules.",
+        "System generates high, critical, and rapid-growth alerts.",
+        "Dashboard provides a complete overview of the monitored location.",
+        "System does not perform identity recognition.",
+        "System works locally on a Windows laptop."
+    ],
+    "coding_rules": {
+        "critical": [
+            "Do not rewrite working Phase 1 code unnecessarily.",
+            "Do not break existing webcam functionality.",
+            "Do not break uploaded-video functionality.",
+            "Do not introduce complex architecture without a clear reason.",
+            "Do not add Qdrant unless a specific Phase 2 feature requires it.",
+            "Do not implement advanced multi-camera identity tracking.",
+            "Do not claim predictive capabilities when only rule-based analytics are implemented."
+        ],
+        "implementation_style": [
+            "Implement one feature at a time.",
+            "Test each feature before continuing.",
+            "Reuse existing Phase 1 components.",
+            "Keep services modular.",
+            "Keep database logic separate.",
+            "Keep frontend components reusable.",
+            "Use environment variables for API keys.",
+            "Use clear error messages."
+        ]
+    },
+    "development_instruction": {
+        "start_with": "Step 1: Refactor and prepare the existing Phase 1 implementation.",
+        "do_not": [
+            "Implement all Phase 2 features at once.",
+            "Delete working Phase 1 functionality.",
+            "Generate the entire project in one response."
+        ],
+        "required_workflow": [
+            "Inspect the existing Phase 1 structure.",
+            "Explain what needs to change.",
+            "Implement Step 1.",
+            "Run and test Phase 1 functionality.",
+            "Only after successful verification move to Step 2."
+        ]
+    },
+    "phase_2_final_architecture": {
+        "input": [
+            "Webcam",
+            "Uploaded video",
+            "Multiple camera sources"
+        ],
+        "ai": [
+            "YOLO person detection",
+            "Person counting"
+        ],
+        "analytics": [
+            "Zone occupancy",
+            "Crowd classification",
+            "Crowd growth detection",
+            "Historical analytics"
+        ],
+        "management": [
+            "Locations",
+            "Monitoring zones",
+            "Camera assignments",
+            "Capacity management"
+        ],
+        "visualization": [
+            "React dashboard",
+            "Google Maps",
+            "Crowd heatmap",
+            "Live zone status",
+            "Historical charts"
+        ],
+        "backend": [
+            "FastAPI",
+            "WebSocket",
+            "SQLite"
+        ],
+        "alerts": [
+            "High occupancy",
+            "Capacity exceeded",
+            "Rapid crowd growth"
+        ]
+    }
+}
