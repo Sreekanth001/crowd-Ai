@@ -1,5 +1,5 @@
 import os
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "..", "crowdvision.db")
@@ -7,8 +7,18 @@ SQLALCHEMY_DATABASE_URL = f"sqlite:///{os.path.abspath(DB_PATH)}"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
-    connect_args={"check_same_thread": False}
+    connect_args={
+        "check_same_thread": False,
+        "timeout": 30  # 30-second timeout to prevent SQLite database lock crashes
+    }
 )
+
+@event.listens_for(engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA journal_mode=WAL;")
+    cursor.execute("PRAGMA synchronous=NORMAL;")
+    cursor.close()
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -24,7 +34,6 @@ def init_db():
     from backend.database.models import Location, Zone, Camera
     Base.metadata.create_all(bind=engine)
     
-    # Ensure default location exists if database is empty
     db = SessionLocal()
     try:
         location_id = "loc-tce-campus"
@@ -40,5 +49,7 @@ def init_db():
             db.commit()
     finally:
         db.close()
+
+
 
 

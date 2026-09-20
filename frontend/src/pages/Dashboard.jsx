@@ -17,24 +17,19 @@ import { Users, Building2, Percent, Bell, Activity } from 'lucide-react';
 
 export function Dashboard() {
   const [locations, setLocations] = useState([
-    { id: 'loc-tce-campus', name: 'TCE Campus', latitude: 9.9252, longitude: 78.1198, zone_count: 4 }
+    { id: 'loc-tce-campus', name: 'TCE Campus', latitude: 9.9252, longitude: 78.1198, zone_count: 0 }
   ]);
   const [selectedLocationId, setSelectedLocationId] = useState('loc-tce-campus');
 
   const [summary, setSummary] = useState({
     total_people: 0,
-    total_capacity: 980,
+    total_capacity: 0,
     overall_occupancy: 0.0,
     active_alerts_count: 0,
-    zones: [
-      { id: 'zone-main-gate', location_id: 'loc-tce-campus', name: 'Main Gate', capacity: 100, latitude: 9.9252, longitude: 78.1198, people_count: 0, occupancy: 0.0, status: 'LOW' },
-      { id: 'zone-canteen', location_id: 'loc-tce-campus', name: 'Canteen', capacity: 80, latitude: 9.9258, longitude: 78.1204, people_count: 0, occupancy: 0.0, status: 'LOW' },
-      { id: 'zone-auditorium', location_id: 'loc-tce-campus', name: 'Auditorium', capacity: 300, latitude: 9.9246, longitude: 78.1192, people_count: 0, occupancy: 0.0, status: 'LOW' },
-      { id: 'zone-ground', location_id: 'loc-tce-campus', name: 'Ground', capacity: 500, latitude: 9.9262, longitude: 78.1188, people_count: 0, occupancy: 0.0, status: 'LOW' }
-    ]
+    zones: []
   });
 
-  const [selectedZoneId, setSelectedZoneId] = useState('zone-main-gate');
+  const [selectedZoneId, setSelectedZoneId] = useState(null);
   const [heatmapData, setHeatmapData] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [trendData, setTrendData] = useState([]);
@@ -49,7 +44,17 @@ export function Dashboard() {
       if (locs && locs.length > 0) setLocations(locs);
 
       const sumData = await fetchLocationSummary(selectedLocationId);
-      if (sumData) setSummary(sumData);
+      if (sumData) {
+        setSummary(sumData);
+        if (sumData.zones && sumData.zones.length > 0) {
+          setSelectedZoneId((prevId) => {
+            if (!prevId || !sumData.zones.some((z) => z.id === prevId)) {
+              return sumData.zones[0].id;
+            }
+            return prevId;
+          });
+        }
+      }
 
       const heat = await fetchLocationHeatmap(selectedLocationId);
       if (heat) setHeatmapData(heat);
@@ -57,10 +62,12 @@ export function Dashboard() {
       const alts = await fetchActiveAlerts();
       if (alts) setAlerts(alts);
 
-      const hist = await fetchZoneHistory(selectedZoneId, timeFilter);
-      if (hist && hist.datapoints) {
-        const formatted = hist.datapoints.map((d) => ({ time: d.time, people: d.people }));
-        setTrendData(formatted);
+      if (selectedZoneId) {
+        const hist = await fetchZoneHistory(selectedZoneId, timeFilter);
+        if (hist && hist.datapoints) {
+          const formatted = hist.datapoints.map((d) => ({ time: d.time, people: d.people }));
+          setTrendData(formatted);
+        }
       }
     } catch (err) {
       console.warn('Backend sync warning:', err.message);
@@ -82,11 +89,12 @@ export function Dashboard() {
       setIsConnected(true);
       if (data.source) setSourceType(data.source);
 
-      // Update Main Gate live metrics in summary state
+      // Update active zone live metrics in summary state
       if (data.people_count !== undefined) {
         setSummary((prev) => {
+          const targetZoneId = selectedZoneId || (prev.zones.length > 0 ? prev.zones[0].id : null);
           const updatedZones = prev.zones.map((z) => {
-            if (z.id === 'zone-main-gate') {
+            if (z.id === targetZoneId) {
               return {
                 ...z,
                 people_count: data.people_count,
@@ -127,7 +135,7 @@ export function Dashboard() {
       unsubscribe();
       analyticsWS.disconnect();
     };
-  }, []);
+  }, [selectedZoneId]);
 
   const handleUpdateCapacity = async (zoneId, newCapacity) => {
     try {
@@ -154,9 +162,8 @@ export function Dashboard() {
   const handleDeleteZone = async (zoneId) => {
     try {
       await deleteZone(zoneId);
-      if (selectedZoneId === zoneId) {
-        setSelectedZoneId('zone-main-gate');
-      }
+      const remaining = summary.zones.filter((z) => z.id !== zoneId);
+      setSelectedZoneId(remaining.length > 0 ? remaining[0].id : null);
       await loadData();
     } catch (err) {
       console.error('Failed to delete zone:', err);
@@ -210,7 +217,7 @@ export function Dashboard() {
     }
   };
 
-  const activeZone = summary.zones.find((z) => z.id === selectedZoneId) || summary.zones[0];
+  const activeZone = summary.zones.find((z) => z.id === selectedZoneId) || summary.zones[0] || null;
 
   return (
     <div className="min-h-screen bg-[#0b0f19] text-slate-100 flex flex-col font-sans">

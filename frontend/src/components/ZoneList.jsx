@@ -15,18 +15,25 @@ export function ZoneList({ zones = [], selectedZoneId, onSelectZone, onUpdateCap
         </span>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {zones.map((zone) => (
-          <ZoneCard
-            key={zone.id}
-            zone={zone}
-            isSelected={selectedZoneId === zone.id}
-            onSelect={onSelectZone}
-            onUpdateCapacity={onUpdateCapacity}
-            onDeleteZone={onDeleteZone}
-          />
-        ))}
-      </div>
+      {zones.length === 0 ? (
+        <div className="p-6 border border-dashed border-slate-800 rounded-xl text-center bg-slate-950/40">
+          <p className="text-sm font-semibold text-slate-400 mb-1">No monitoring zones created yet.</p>
+          <p className="text-xs text-slate-500">Click anywhere on the interactive map below to place a monitoring zone!</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {zones.map((zone) => (
+            <ZoneCard
+              key={zone.id}
+              zone={zone}
+              isSelected={selectedZoneId === zone.id}
+              onSelect={onSelectZone}
+              onUpdateCapacity={onUpdateCapacity}
+              onDeleteZone={onDeleteZone}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -199,10 +199,8 @@ export function LiveMap({
   };
 
   const handleMapClick = (lat, lng) => {
-    if (isAddMode) {
-      setDraftCoords({ lat, lng });
-      setNewZoneName(`Zone ${zones.length + 1}`);
-    }
+    setDraftCoords({ lat, lng });
+    setNewZoneName(`Zone ${zones.length + 1}`);
   };
 
   const handleCreateZoneSubmit = async (e) => {

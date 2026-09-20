@@ -23,6 +23,18 @@ def test_phase2_endpoints():
     assert len(locations) > 0
     loc_id = locations[0]["id"]
 
+    # Create a test zone via API
+    zone_payload = json.dumps({
+        "name": "Map Clicked Test Zone",
+        "capacity": 150,
+        "latitude": 9.9252,
+        "longitude": 78.1198
+    }).encode("utf-8")
+    req = urllib.request.Request(f"{base_url}/locations/{loc_id}/zones", data=zone_payload, headers={"Content-Type": "application/json"}, method="POST")
+    res = urllib.request.urlopen(req).read().decode()
+    created_zone = json.loads(res)
+    print("Created test zone via API:", created_zone["name"])
+
     # 3. Location Summary endpoint
     res = urllib.request.urlopen(f"{base_url}/locations/{loc_id}/summary").read().decode()
     summary = json.loads(res)
@@ -31,12 +43,12 @@ def test_phase2_endpoints():
     print(f" - Total Capacity: {summary['total_capacity']}")
     print(f" - Overall Occupancy: {summary['overall_occupancy']}%")
     print(f" - Zones count: {len(summary['zones'])}")
-    assert len(summary["zones"]) >= 4
+    assert len(summary["zones"]) >= 1
 
     # 4. Zones endpoint
     res = urllib.request.urlopen(f"{base_url}/locations/{loc_id}/zones").read().decode()
     zones = json.loads(res)
-    assert len(zones) >= 4
+    assert len(zones) >= 1
 
     # 5. Zone History endpoint
     zone_id = zones[0]["id"]
@@ -49,7 +61,7 @@ def test_phase2_endpoints():
     res = urllib.request.urlopen(f"{base_url}/locations/{loc_id}/heatmap").read().decode()
     heatmap = json.loads(res)
     print(f"Heatmap points count: {len(heatmap)}")
-    assert len(heatmap) >= 4
+    assert len(heatmap) >= 1
 
     # 7. Active Alerts endpoint
     res = urllib.request.urlopen(f"{base_url}/alerts").read().decode()
