@@ -28,6 +28,10 @@ ENV/
 
 # Database files
 backend/crowdvision.db
+*.db
+*.db-shm
+*.db-wal
+*.sqlite3
 
 # Node / JS
 node_modules/
